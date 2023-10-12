@@ -1,138 +1,80 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 
-#define MAX_EXPRESSION_LENGTH 100
-#define MAX_STACK_SIZE 100
+#define n 100
 
-typedef struct {
-    char items[MAX_STACK_SIZE];
-    int top;
-} OperatorStack;
+char infix[n];
+char postfix[n];
+char stack[n];
+int top = -1;
 
-void initializeOperatorStack(OperatorStack *stack) {
-    stack->top = -1;
-}
-
-bool isOperatorStackEmpty(OperatorStack *stack) {
-    return stack->top == -1;
-}
-
-void pushOperator(OperatorStack *stack, char operator) {
-    stack->items[++stack->top] = operator;
-}
-
-char popOperator(OperatorStack *stack) {
-    if (!isOperatorStackEmpty(stack)) {
-        return stack->items[stack->top--];
-    }
-    return '\0'; 
-}
-
-int getOperatorPrecedence(char operator) {
-    if (operator == '+' || operator == '-') {
+int precedence(char op) {
+    if (op=='+' || op=='-')
         return 1;
-    } else if (operator == '*' || operator == '/') {
+    else if (op=='*' || op=='/')
         return 2;
-    }
-    return 0; 
+    else
+        return 0;
 }
 
-void infixToPostfix(char infixExpression[], char postfixExpression[]) {
-    OperatorStack operatorStack;
-    initializeOperatorStack(&operatorStack);
-
-    int infixIndex = 0, postfixIndex = 0;
-    
-    while (infixExpression[infixIndex] != '\0') {
-        char token = infixExpression[infixIndex];
-        
-        if (isalnum(token)) {
-            postfixExpression[postfixIndex++] = token; 
-        } else if (token == '(') {
-            pushOperator(&operatorStack, token); 
-        } else if (token == ')') {
-            while (!isOperatorStackEmpty(&operatorStack) && operatorStack.items[operatorStack.top] != '(') {
-                postfixExpression[postfixIndex++] = popOperator(&operatorStack); 
-            }
-            if (!isOperatorStackEmpty(&operatorStack) && operatorStack.items[operatorStack.top] == '(') {
-                popOperator(&operatorStack); 
-            }
-        } else {
-            while (!isOperatorStackEmpty(&operatorStack) && getOperatorPrecedence(operatorStack.items[operatorStack.top]) >= getOperatorPrecedence(token)) {
-                postfixExpression[postfixIndex++] = popOperator(&operatorStack); 
-            }
-            pushOperator(&operatorStack, token); 
-        }
-        infixIndex++;
+void push(char op) {
+    if (top>=n-1) {
+        printf("Stack overflow\n");
+        return;
     }
-    
-    while (!isOperatorStackEmpty(&operatorStack)) {
-        postfixExpression[postfixIndex++] = popOperator(&operatorStack); 
-    }
-    
-    postfixExpression[postfixIndex] = '\0'; 
+    stack[++top] = op;
 }
 
+char pop() {
+    if (top==-1) {
+        printf("Stack underflow\n");
+        return '\0';
+    }
+    return stack[top--];
+}
 
-int evaluatePostfix(char postfixExpression[]) {
-    OperatorStack operandStack;
-    initializeOperatorStack(&operandStack);
+int isOperator(char ch) {
+    return (ch=='+' || ch=='-' || ch=='*' || ch=='/');
+}
 
+void infixToPostfix() {
+    int len = strlen(infix);
     int index = 0;
 
-    while (postfixExpression[index] != '\0') {
-        char token = postfixExpression[index];
-
-        if (isalnum(token)) {
-            pushOperator(&operandStack, token - '0'); 
-        } else {
-            int operand2 = popOperator(&operandStack);
-            int operand1 = popOperator(&operandStack);
-
-            switch (token) {
-                case '+':
-                    pushOperator(&operandStack, operand1 + operand2);
-                    break;
-                case '-':
-                    pushOperator(&operandStack, operand1 - operand2);
-                    break;
-                case '*':
-                    pushOperator(&operandStack, operand1 * operand2);
-                    break;
-                case '/':
-                    if (operand2 != 0) {
-                        pushOperator(&operandStack, operand1 / operand2);
-                    } else {
-                        printf("Division by zero error.\n");
-                        exit(1);
-                    }
-                    break;
+    for (int i = 0; i < len; i++) {
+        char ch = infix[i];
+        if (ch == ' ' || ch == '\t') {
+            continue;
+        } else if (isdigit(ch) || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
+            postfix[index++] = ch;
+        } else if (isOperator(ch)) {
+            while (top != -1 && precedence(stack[top]) >= precedence(ch)) {
+                postfix[index++] = pop();
             }
+            push(ch);
+        } else if (ch == '(') {
+            push(ch);
+        } else if (ch == ')') {
+            while (top != -1 && stack[top] != '(') {
+                postfix[index++] = pop();
+            }
+            pop();  // Pop '('
         }
-        index++;
     }
 
-    return popOperator(&operandStack);
+    while (top != -1) {
+        postfix[index++] = pop();
+    }
+    postfix[index] = '\0';
 }
 
 int main() {
-    char infixExpression[MAX_EXPRESSION_LENGTH];
-    char postfixExpression[MAX_EXPRESSION_LENGTH];
-
     printf("Enter an infix expression: ");
-    fgets(infixExpression, sizeof(infixExpression), stdin);
-    
-    if (infixExpression[strlen(infixExpression) - 1] == '\n') {
-        infixExpression[strlen(infixExpression) - 1] = '\0';
-    }
+    scanf("%[^\n]", infix);
 
-    infixToPostfix(infixExpression, postfixExpression);
-    printf("Postfix expression: %s\n", postfixExpression);
+    infixToPostfix();
 
-    int result = evaluatePostfix(postfixExpression);
-    printf("Result: %d\n", result);
+    printf("Postfix expression: %s\n", postfix);
 
     return 0;
 }
