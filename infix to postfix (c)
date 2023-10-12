@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 #define n 100
 
@@ -9,16 +10,18 @@ char stack[n];
 int top = -1;
 
 int precedence(char op) {
-    if (op=='+' || op=='-')
+    if (op == '+' || op == '-')
         return 1;
-    else if (op=='*' || op=='/')
+    else if (op == '*' || op == '/')
         return 2;
+    else if (op == '^')
+        return 3;
     else
         return 0;
 }
 
 void push(char op) {
-    if (top>=n-1) {
+    if (top >= n - 1) {
         printf("Stack overflow\n");
         return;
     }
@@ -26,7 +29,7 @@ void push(char op) {
 }
 
 char pop() {
-    if (top==-1) {
+    if (top == -1) {
         printf("Stack underflow\n");
         return '\0';
     }
@@ -34,7 +37,7 @@ char pop() {
 }
 
 int isOperator(char ch) {
-    return (ch=='+' || ch=='-' || ch=='*' || ch=='/');
+    return (ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '^');
 }
 
 void infixToPostfix() {
@@ -58,7 +61,7 @@ void infixToPostfix() {
             while (top != -1 && stack[top] != '(') {
                 postfix[index++] = pop();
             }
-            pop();  // Pop '('
+            pop();  
         }
     }
 
