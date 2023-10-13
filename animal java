@@ -1,0 +1,63 @@
+import java.util.Scanner;
+
+class Animal {
+    String name;
+    int age;
+
+    Animal(inta,String n) {
+        age=a;
+        name=n;
+    }
+}
+
+class Carnivore extends Animal {
+    String type;
+
+    Carnivore(int a, String n) {
+        super(a, n);
+        type = "carnivore";
+    }
+
+    void display() {
+        System.out.println("Name of animal: " + name);
+        System.out.println("Age of animal: " + age);
+        System.out.println("Type of animal: " + type);
+    }
+}
+
+class Herbivore extends Animal {
+    String type;
+
+    Herbivore(int a, String n) {
+        super(a, n);
+        type = "herbivore";
+    }
+
+    void display() {
+        System.out.println("Name of animal: " + name);
+        System.out.println("Age of animal: " + age);
+        System.out.println("Type of animal: " + type);
+    }
+}
+
+class demo {
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+        System.out.println("Enter the name of the animal:");
+        String n = s.nextLine();
+        System.out.println("Enter the age of the animal:");
+        int a = s.nextInt();
+        System.out.println("Enter the type of animal (1 for herbivore, 2 for carnivore):");
+        int t = s.nextInt();
+
+        if (t == 1) {
+            Herbivore h = new Herbivore(a, n);
+            h.display();
+        } else if (t == 2) {
+            Carnivore c = new Carnivore(a, n);
+            c.display();
+        } else {
+            System.out.println("Invalid type");
+        }
+    }
+}
