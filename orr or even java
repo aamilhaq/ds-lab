@@ -1,0 +1,29 @@
+import java.util.Scanner;
+
+class oddoreven {
+    public static void main(String[] args) {
+    	int i,n,ocount=0,ecount=0;
+        Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the limit of the array: ");
+        n = s.nextInt();
+
+        int[] num = new int[n];
+
+        System.out.println("Enter the elements in the array: ");
+        for (i=0;i<n;i++) {
+            num[i]=s.nextInt();
+        }
+
+        for (i=0;i<n;i++) {
+            if (num[i]%2==0) {
+                ecount++;
+            } else {
+                ocount++;
+            }
+        }
+
+        System.out.println("Number of even elements: " + ecount);
+        System.out.println("Number of odd elements: " + ocount);
+    }
+}
