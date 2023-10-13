@@ -1,0 +1,73 @@
+import java.util.Scanner;
+
+public class matrix {
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+	int i,j,r1,r2,c1,c2;
+        System.out.print("Enter the number of rows for matrix 1: ");
+        r1=s.nextInt();
+        System.out.print("Enter the number of columns for matrix 1: ");
+        c1=s.nextInt();
+
+        System.out.print("Enter the number of rows for matrix 2: ");
+        r2=s.nextInt();
+        System.out.print("Enter the number of columns for matrix 2: ");
+        c2=s.nextInt();
+
+        if (r1!=r2 || c1!=c2) {
+            System.out.println("Matrix dimensions must be the same for addition.");
+            return;
+        }
+
+        int[][] mat1 = new int[r1][c1];
+        int[][] mat2 = new int[r2][c2];
+
+      
+        System.out.println("Enter elements for matrix 1:");
+        for (i=0;i<r1;i++) {
+            for (j=0;j<c1;j++) {
+                mat1[i][j]=s.nextInt();
+            }
+        }
+
+        System.out.println("Enter elements for matrix 2:");
+        for (i=0;i<r2;i++) {
+            for (j=0;j<c2;j++) {
+                mat2[i][j]=s.nextInt();
+            }
+        }
+
+       
+        int[][] mat3 = new int[r1][c2];
+        for (i=0;i<r1;i++) {
+            for (j=0;j<c1;j++) {
+                mat3[i][j] = mat1[i][j] + mat2[i][j];
+            }
+        }
+
+
+        System.out.println("Sum of matrices 1 and 2:");
+        for (i=0;i<r1; i++) {
+            for (j=0;j<c1; j++) {
+                System.out.print(mat3[i][j] + " ");
+            }
+            System.out.println();
+        }
+
+
+        int[][] transposeMatrix = new int[c1][r1];
+        for (i=0;i<c1; i++) {
+            for (j=0;j<r1;j++) {
+                transposeMatrix[i][j] = mat3[j][i];
+            }
+        }
+
+        System.out.println("Transpose of the sum matrix:");
+        for (i=0;i<c1; i++) {
+            for (j=0;j<r1;j++) {
+                System.out.print(transposeMatrix[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
