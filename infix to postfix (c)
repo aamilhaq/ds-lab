@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <ctype.h>
 
 #define n 100
 
@@ -61,7 +62,7 @@ void infixToPostfix() {
             while (top != -1 && stack[top] != '(') {
                 postfix[index++] = pop();
             }
-            pop();  
+            pop();
         }
     }
 
@@ -71,6 +72,45 @@ void infixToPostfix() {
     postfix[index] = '\0';
 }
 
+double evaluatePostfix() {
+    int len = strlen(postfix);
+    double stack[n];
+    int top = -1;
+
+    for (int i = 0; i < len; i++) {
+        char ch = postfix[i];
+        if (isdigit(ch)) {
+            stack[++top] = ch - '0';
+        } else if (isOperator(ch)) {
+            double operand2 = stack[top--];
+            double operand1 = stack[top--];
+            double result;
+
+            switch (ch) {
+                case '+':
+                    result = operand1 + operand2;
+                    break;
+                case '-':
+                    result = operand1 - operand2;
+                    break;
+                case '*':
+                    result = operand1 * operand2;
+                    break;
+                case '/':
+                    result = operand1 / operand2;
+                    break;
+                case '^':
+                    result = pow(operand1, operand2);
+                    break;
+            }
+
+            stack[++top] = result;
+        }
+    }
+
+    return stack[top];
+}
+
 int main() {
     printf("Enter an infix expression: ");
     scanf("%[^\n]", infix);
@@ -78,6 +118,9 @@ int main() {
     infixToPostfix();
 
     printf("Postfix expression: %s\n", postfix);
+
+    double result = evaluatePostfix();
+    printf("Result: %.2f\n", result);
 
     return 0;
 }
