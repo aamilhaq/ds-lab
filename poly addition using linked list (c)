@@ -128,8 +128,8 @@ void main()
 	int ch,co,exp;
 	int t = 1;
 	while(t){
-		printf("1. Add to polynomial 1\n");
-		printf("2. Add to polynomial 2\n");
+		printf("1.Add to polynomial 1\n");
+		printf("2.Add to polynomial 2\n");
 		printf("3.Perform Addition\n");
 		printf("4.Exit\n");
 		scanf("%d",&ch);
