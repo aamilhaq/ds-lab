@@ -122,7 +122,7 @@ void display(struct node* head)
 	printf("\n");
 }
 
-void mian()
+void main()
 {
 	struct node *p1 = NULL	, *p2 = NULL, *sum = NULL;
 	int ch,co,exp;
@@ -130,8 +130,8 @@ void mian()
 	while(t){
 		printf("1. Add to polynomial 1\n");
 		printf("2. Add to polynomial 2\n");
-		printf("Perform Addition\n");
-		printf("Exit\n");
+		printf("3.Perform Addition\n");
+		printf("4.Exit\n");
 		scanf("%d",&ch);
 		
 		switch(ch){
