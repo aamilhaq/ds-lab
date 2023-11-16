@@ -56,13 +56,23 @@ void insertatspecificnode()
  		printf("Enter the node at which you wish to insert");
  		scanf("%d",&n);
  		ptr=head;
- 		while (ptr->data!=n)
+ 		while ((ptr->data!=n)&&(ptr!=NULL))
  			{ptr=ptr->next;
  			}
- 		ptr=ptr->next;
- 		p->next=ptr->next;
- 		ptr->next->prev=p;
- 		ptr->next=p;
+ 		if(ptr->data==n)
+ 			{if(ptr==head)
+ 				{insertatbegining();
+ 				}
+ 			else if(ptr==tail)
+				{insertatend();
+				}
+			else
+				{
+ 				p->next=ptr->next;
+ 				ptr->next->prev=p;
+ 				ptr->next=p;
+ 				}
+ 			}
  		}
 	}
 void deleteattheend()
@@ -125,13 +135,12 @@ void deleteatspecificnode()
 		else
 		{
 		ptr=head;
-		while (ptr->data!=n&&ptr!=NULL)
-			{
+		while ((ptr->data!=n)&&(ptr!=NULL))
+			{pre=ptr;
 			ptr=ptr->next;
 			}
-		pre=ptr->next;
-		ptr->next=pre->next;
-		p->next->prev=ptr;
+		pre->next=ptr->next;
+		ptr->next->prev=pre;
 		free(ptr);
 		}
 		}
