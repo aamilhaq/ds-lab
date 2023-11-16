@@ -90,14 +90,16 @@ double evaluatePostfix(char* postfix) {
 
     for (int i = 0; i < len; i++) {
         char ch = postfix[i];
-        if (isalnum(ch)) {
+        if (isalpha(ch)) {
             double value;
             printf("Enter the value of variable '%c': ", ch);
             scanf("%lf", &value);
-            push(&stack, value + '0');
+            push(&stack, value);
+        } else if (isdigit(ch)) {
+            push(&stack, ch - '0');  // Convert character to integer and push onto the stack
         } else if (isOperator(ch)) {
-            double operand2 = stack.items[stack.top--] - '0';
-            double operand1 = stack.items[stack.top--] - '0';
+            double operand2 = pop(&stack);
+            double operand1 = pop(&stack);
             double result;
 
             switch (ch) {
@@ -118,12 +120,14 @@ double evaluatePostfix(char* postfix) {
                     break;
             }
 
-            push(&stack, result + '0');
+            push(&stack, result);  // Push the result back onto the stack
         }
     }
 
-    return stack.items[stack.top] - '0';
+    return pop(&stack);  // The final result will be at the top of the stack
 }
+
+
 
 int main() {
     char infix[max];
