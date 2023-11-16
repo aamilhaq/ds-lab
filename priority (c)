@@ -1,0 +1,121 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    int priority;
+    struct Node* next;
+};
+
+struct Node* head = NULL;
+
+void push(int data, int priority) {
+    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+    new_node->data = data;
+    new_node->priority = priority;
+    new_node->next = NULL;
+
+    if (head == NULL || priority < head->priority) {
+        new_node->next = head;
+        head = new_node;
+    } else {
+        struct Node* temp = head;
+        while (temp->next != NULL && temp->next->priority <= priority) {
+            temp = temp->next;
+        }
+        new_node->next = temp->next;
+        temp->next = new_node;
+    }
+}
+
+void deleteHighestPriority() {
+    if (head == NULL) {
+        printf("Priority queue is empty\n");
+    } else {
+        struct Node* temp = head;
+        struct Node* prev = NULL;
+        struct Node* highest = head;
+        while (temp->next != NULL) {
+            if (temp->next->priority > highest->priority) {
+                highest = temp->next;
+                prev = temp;
+            }
+            temp = temp->next;
+        }
+        if (prev == NULL) {
+            head = head->next;
+        } else {
+            prev->next = highest->next;
+        }
+        printf("Deleted element with lowest priority: %d\n", highest->data);
+        free(highest);
+    }
+}
+
+void deleteLowestPriority() {
+    if (head == NULL) {
+        printf("Priority queue is empty\n");
+    } else {
+        struct Node* temp = head;
+        struct Node* prev = NULL;
+        struct Node* lowest = head;
+        while (temp->next != NULL) {
+            if (temp->next->priority < lowest->priority) {
+                lowest = temp->next;
+                prev = temp;
+            }
+            temp = temp->next;
+        }
+        if (prev == NULL) {
+            head = head->next;
+        } else {
+            prev->next = lowest->next;
+        }
+        printf("Deleted element with highest priority: %d\n", lowest->data);
+        free(lowest);
+    }
+}
+
+void display() {
+    struct Node* temp = head;
+    while (temp != NULL) {
+        printf("(%d, priority: %d) ", temp->data, temp->priority);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    int choice, data, priority;
+    while (1) {
+        printf("\nMenu:\n");
+        printf("1. Add element\n");
+        printf("2. Delete element with lowest priority\n");
+        printf("3. Delete element with highest priority\n");
+        printf("4. Display\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        switch (choice) {
+            case 1:
+                printf("Enter element and priority: ");
+                scanf("%d %d", &data, &priority);
+                push(data, priority);
+                break;
+            case 2:
+                deleteHighestPriority();
+                break;
+            case 3:
+                deleteLowestPriority();
+                break;
+            case 4:
+                display();
+                break;
+            case 5:
+                return 0;
+            default:
+                printf("Invalid choice\n");
+        }
+    }
+    return 0;
+}
