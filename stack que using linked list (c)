@@ -1,0 +1,142 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+  int data;
+  struct node *next;
+};
+struct node *p,*front,*top,*rear,*ptr;
+int ch;
+void main()
+{
+  top=NULL;
+  front=NULL;
+  while(ch!=7)
+  {
+  printf("Enter the choice\n 1:push\n 2:pop\n 3:displaystack\n 4:enqueue\n 5:dequeue\n 6:displayqueue\n 7:exit\n");
+  scanf("%d",&ch);
+  switch(ch)
+  {
+    case 1:
+    {
+       p=(struct node*)malloc(sizeof(struct node));
+       printf("Enter the data\n");
+       scanf("%d",&p->data);
+       if(top==NULL)
+       {
+         p->next=NULL;
+         top=p;
+       }
+       else
+       {
+        p->next=top;
+        top=p;
+       }
+       break;
+    }
+     case 2:
+       {
+         if(top==NULL)
+         {
+           printf("Stack is empty\n");
+          }
+         else
+         {
+          p=top;
+          top=top->next;
+          free(p);
+         }
+        }
+         break;
+      case 3:
+        {
+          if(top==NULL)
+          {
+            printf("Stack is empty\n");
+           }
+          else
+          {
+            p=top;
+            while(p!=NULL)
+            {
+              printf("%d\t",p->data);
+              p=p->next;
+             }
+           }
+          }
+     break;
+    case 4:
+   {
+         p=(struct node*)malloc(sizeof(struct node));
+         printf("Enter the data\n");
+         scanf("%d",&p->data);
+         p->next=NULL;
+         if(front==NULL && rear==NULL)
+         {
+           front=p;
+           rear=p;
+         }
+         else
+         {
+           rear->next=p;
+           rear=p;
+          }
+    } break;
+       case 5:
+       {
+         if(front==NULL)
+         {
+          printf("Queue is empty\n");
+         }
+         else if(front==rear)
+         {
+           front=NULL;
+           rear=NULL;
+         }
+         else
+         {
+           ptr=front;
+           front=ptr->next;
+           free(ptr);
+         }
+        }
+         break;
+       case 6:
+       {
+         ptr=front;
+         printf("The queue is");
+         while(ptr!=NULL)
+         {
+           
+           printf("%d\t",p->data);
+           ptr=ptr->next;
+         }
+       }
+        break;
+  case 7:
+  {
+     exit(0);
+  }
+   break;
+  default:
+  {
+   printf("Invalid choice");
+   }
+  }
+ }
+}
+      
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
