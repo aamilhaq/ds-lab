@@ -1,133 +1,276 @@
-#include <stdio.h>
-#include <stdlib.h>
 
-struct Node {
-    int coeff;
-    int pow;
-    struct Node* next;
+#include<stdio.h>
+#include<stdlib.h>
+
+struct node1
+{
+int exp;
+int coeff;
+struct node1 *next;
 };
+struct node1 *p1, *head1, *tail1,*p;
 
-void readPolynomial(struct Node** poly, int n) {
-    for (int i = 0; i < n; i++) {
-        struct Node* temp = (struct Node*)malloc(sizeof(struct Node));
-        printf("\nEnter the coefficient of term %d: ", i + 1);
-        scanf("%d", &temp->coeff);
-        printf("\nEnter the power of term %d: ", i + 1);
-        scanf("%d", &temp->pow);
-        temp->next = NULL;
-        if (*poly == NULL) {
-            *poly = temp;
-        } else {
-            struct Node* p = *poly;
-            while (p->next != NULL) {
-                p = p->next;
-            }
-            p->next = temp;
-        }
-    }
+struct node2
+{
+int exp;
+int coeff;
+struct node2 *next;
+};
+struct node2 *p2, *head2, *tail2,*q;
+
+struct node3
+{
+int exp;
+int coeff;
+struct node3 *next;
+};
+struct node3  *head3, *tail3, *ptr,*r, *head4, *tail4, *m, *pre;
+
+void insert1()
+{
+p1 = (struct node1*) malloc (sizeof(struct node1));
+printf("Enter coefficient : ");
+scanf("%d",&p1->coeff);
+printf("Enter exponent : ");
+scanf("%d",&p1->exp);
+p1->next = NULL;
+if (head1 == NULL)
+{
+head1=p1;
+tail1=p1;
+}
+else
+{
+tail1->next=p1;
+tail1=p1;
+}
 }
 
-void displayPolynomial(struct Node* poly) {
-    printf("\nPolynomial expression is: ");
-    while (poly != NULL) {
-        printf("%dX^%d", poly->coeff, poly->pow);
-        poly = poly->next;
-        if (poly != NULL) {
-            printf("+");
-        }
-    }
+
+void insert2()
+{
+p2 = (struct node2*) malloc (sizeof(struct node2));
+printf("Enter coefficient : ");
+scanf("%d",&p2->coeff);
+printf("Enter exponent : ");
+scanf("%d",&p2->exp);
+p2->next = NULL;
+if (head2 == NULL)
+{
+head2=p2;
+tail2=p2;
+}
+else
+{
+tail2->next=p2;
+tail2=p2;
+}
 }
 
-void addPolynomials(struct Node** result, struct Node* first, struct Node* second) {
-    struct Node* temp = (struct Node*)malloc(sizeof(struct Node));
-    temp->next = NULL;
-    *result = temp;
-    while (first && second) {
-        if (first->pow > second->pow) {
-            temp->coeff = first->coeff;
-            temp->pow = first->pow;
-            first = first->next;
-        } else if (first->pow < second->pow) {
-            temp->coeff = second->coeff;
-            temp->pow = second->pow;
-            second = second->next;
-        } else {
-            temp->coeff = first->coeff + second->coeff;
-            temp->pow = first->pow;
-            first = first->next;
-            second = second->next;
-        }
-        if (first && second) {
-            temp->next = (struct Node*)malloc(sizeof(struct Node));
-            temp = temp->next;
-            temp->next = NULL;
-        }
-    }
-    while (first || second) {
-        temp->next = (struct Node*)malloc(sizeof(struct Node));
-        temp = temp->next;
-        temp->next = NULL;
-        if (first) {
-            temp->coeff = first->coeff;
-            temp->pow = first->pow;
-            first = first->next;
-        }
-        if (second) {
-            temp->coeff = second->coeff;
-            temp->pow = second->pow;
-            second = second->next;
-        }
-    }
+
+void polyadd()
+{
+p=head1, q=head2;
+while ((p!= NULL) && (q!= NULL))
+{
+
+r = (struct node3*) malloc (sizeof(struct node3));
+if (p->exp > q->exp)
+{
+r->exp= p->exp;
+r->coeff=p->coeff;
+p=p->next;
+if (head3 == NULL)
+{
+head3=r;
+tail3=r;
+}
+else
+{
+tail3->next=r;
+tail3=r;
+}
+}
+else if(p->exp < q->exp)
+{
+r->exp= q->exp;
+r->coeff=p->coeff;
+q=q->next;
+if (head3 == NULL)
+{
+head3=r;
+tail3=r;
+}
+else
+{
+tail3->next=r;
+tail3=r;
+}
+}
+else
+{
+if ((p->coeff +q->coeff)!=0)
+{
+r->coeff=p->coeff+q->coeff;
+r->exp=q->exp;
+if (head3 == NULL)
+{
+head3=r;
+tail3=r;
+}
+else
+{
+tail3->next=r;
+tail3=r;
+}
+}
+p=p->next;
+q=q->next;
 }
 
-void displayResult(struct Node* result) {
-    printf("\nResultant polynomial is: \n");
-    while (result != NULL) {
-        printf("%d  ", result->coeff);
-        printf("%d  ", result->pow);
-        result = result->next;
-    }
+}
+while (p!=NULL)
+{
+r = (struct node3*) malloc (sizeof(struct node3));
+r->coeff=p->coeff;
+r->exp=p->exp;
+p=p->next;
+if (head3 == NULL)
+{
+head3=r;
+tail3=r;
+}
+else
+{
+tail3->next=r;
+tail3=r;
+}
 }
 
-int main() {
-    struct Node* first = NULL;
-    struct Node* second = NULL;
-    struct Node* result = NULL;
-    int n1, n2;
-    int choice;
-    do {
-        printf("\nMenu:\n");
-        printf("1. Enter first polynomial\n");
-        printf("2. Enter second polynomial\n");
-        printf("3. Add polynomials\n");
-        printf("4. Display result\n");
-        printf("5. Exit\n");
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
-        switch (choice) {
-            case 1:
-                printf("\nEnter the number of terms in first polynomial: ");
-                scanf("%d", &n1);
-                readPolynomial(&first, n1);
-                break;
-            case 2:
-                printf("\nEnter the number of terms in second polynomial: ");
-                scanf("%d", &n2);
-                readPolynomial(&second, n2);
-                break;
-            case 3:
-                addPolynomials(&result, first, second);
-                printf("\nPolynomials added successfully!\n");
-                break;
-            case 4:
-                displayResult(result);
-                break;
-            case 5:
-                printf("\nExiting program...\n");
-                break;
-            default:
-                printf("\nInvalid choice! Please try again.\n");
-        }
-    } while (choice != 7);
-    return 0;
+while (q!=NULL)
+{
+r = (struct node3*) malloc (sizeof(struct node3));
+r->exp=q->exp;
+r->coeff=q->coeff;
+q=q->next;
+if (head3 == NULL)
+{
+head3=r;
+tail3=r;
+}
+else
+{
+tail3->next=r;
+tail3=r;
+}
+}
+ptr= head3;
+printf("---Resultant polynomial---\n");
+while ( ptr!=NULL)
+{
+
+printf("%dX^%d  ",ptr->coeff,ptr->exp);
+if(ptr->next!=NULL)
+printf("+");
+ptr=ptr->next;
+}
+}
+
+void polymult()
+{
+
+p=head1;
+while(p!=NULL)
+{
+q=head2;
+while(q!=NULL)
+{
+m=(struct node3*)malloc(sizeof(struct node3));
+if(head4==NULL)
+{
+head4=m;
+tail4=m;
+}
+else
+{
+tail4->next=m;
+tail4=m;
+}
+m->coeff=p->coeff*q->coeff;
+m->exp=p->exp+q->exp;
+q=q->next;
+}
+p=p->next;
+}
+m=head4;
+while(m!=NULL)
+{
+pre=m->next;
+while(pre!=NULL)
+{
+if(m->exp==pre->exp)
+{
+m->coeff=m->coeff+pre->coeff;
+pre->coeff=0;
+}
+pre=pre->next;
+}
+m=m->next;
+}
+m=head4; pre=head4;
+printf("\n---The Resultant Polynomial---\n");
+while(m!=NULL)
+{
+if(m->coeff!=0)
+{
+printf("%dx^%d",m->coeff,m->exp);
+if(m->next!=NULL)
+printf("+");
+}
+m=m->next;
+}
+
+
+}
+
+
+void main()
+{
+    int i,m, n, ch,x=1;
+    head1=NULL,  head2=NULL,  head3=NULL ,head4=NULL;
+    printf("---POLYNOMIALS : Linked list operations---\n");
+    printf("Enter the details of polynomial A :\nEnter the total number of terms :");
+    scanf("%d",&m);
+    printf("Enter the exponents and coefficients in order\n");
+    for (i=1; i<=m;i++)
+    {
+    insert1();
+    }
+    printf("Enter the details of polynomial B :\nEnter the total number of terms :");
+    scanf("%d",&n);
+    printf("Enter the exponents and coefficients in order\n");
+    for (i=1; i<=n;i++)
+    {
+    insert2();
+    }
+    while (x==1)
+    {
+   printf("1: addition\n2:multiplication");
+   scanf("%d",&ch);
+   switch(ch)
+   {
+    case 1:
+    {
+    polyadd();
+    break;
+    }
+    case 2:
+    {
+    polymult();
+    break;
+    }
+   }
+   printf("Do u want to continue yes:1 no:0  :");
+   scanf("%d",&x);
+}
 }
