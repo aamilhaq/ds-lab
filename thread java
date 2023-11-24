@@ -1,0 +1,51 @@
+import java.util.*;
+import java.io.*;
+
+class Display{
+	synchronized void display(int n){
+		try{
+			System.out.println(n);
+			Thread.sleep(1500);
+			System.out.println(n);
+			}
+		catch(InterruptedException e){
+			System.out.println("Thread interrupted.");
+			}
+		}
+	}
+
+class Even extends Thread{
+	Display d;
+	Even(Display d){
+	this.d=d;
+	start();
+	}
+	
+	public void run(){
+		for(int i=2;i<=10;i=i+2){
+			d.display(i);
+		}
+	}
+}
+
+class Odd extends Thread{
+	Display d;
+	Odd(Display d){
+	this.d=d;
+	start();
+	}
+	
+	public void run(){
+		for(int i=1;i<10;i=i+2){
+			d.display(i);
+		}
+	}
+}
+
+class threaddemo{
+public static void main(String args[]){
+	Display d=new Display();
+	Odd o=new Odd(d);
+	Even e=new Even(d);
+	}
+}
