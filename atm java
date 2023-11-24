@@ -1,0 +1,181 @@
+import java.io.*;
+import java.util.*;
+class BankATM 
+	{
+   	String accountNumber;
+    	double balance;
+    	BankATM(String accountNumber) 
+    		{
+        	this.accountNumber = accountNumber;
+        	this.balance = readAccountBalance();
+    		}
+    	double Balance() 
+    		{
+        	return balance;
+    		}
+  	void deposit(double amount) 
+  		{
+        	if (amount <= 0) 
+        		{
+            		System.out.println("Invalid deposit amount");
+        		}
+        	balance += amount;
+        	writeAccountBalance();
+        	System.out.println("Deposit of Rs." + amount + " successful.");
+    		}
+
+    	void withdraw(double amount) 
+    		{
+        	if (amount <= 0) 
+        		{
+            		System.out.println("Invalid withdrawal amount");
+        		}
+
+        	else if (amount > balance) 
+        		{
+            		System.out.println("Insufficient balance. Withdrawal failed.");
+        		}
+		else
+			{
+        		balance -= amount;
+        		writeAccountBalance();
+        		System.out.println("Withdrawal of Rs." + amount + " successful.");
+        		}
+   		 }
+
+    	void transfer(BankATM r, double amount) 
+    		{
+        	if (this == r) 
+        		{
+            		System.out.println("You cannot transfer to your own account.");
+        		}
+        	else if (amount <= 0) 
+        		{
+            		System.out.println("Invalid transfer amount");
+        		}
+        	else if (amount > balance) 
+        		{
+            		System.out.println("Insufficient balance. Transfer failed.");
+        		}
+		else
+			{
+			balance -= amount;
+        		r.balance += amount;
+        		writeAccountBalance();
+        		r.writeAccountBalance();
+        		System.out.println("Transfer of Rs" + amount + " successful.");
+        		}
+    		}
+
+    	double readAccountBalance() 
+    		{
+        	try (BufferedReader br = new BufferedReader(new FileReader(accountNumber + ".txt"))) 
+        		{
+            		return Double.parseDouble(br.readLine());
+        		}		 
+        	catch (FileNotFoundException e) 
+        	{
+           	System.out.println("Account not found");
+           	return 0.0;
+        	}
+         	catch (IOException e) {
+            	System.out.println("An error occurred while reading the account balance.");
+            	return 0.0;
+        	}	
+    		}
+
+    void writeAccountBalance() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(accountNumber + ".txt"))) {
+            writer.write(Double.toString(balance));
+        }
+         catch (IOException e) {
+            System.out.println("An error occurred while writing the account balance.");
+        }
+    }
+}
+
+public class atm 
+	{
+    	public static void main(String[] args) 
+    		{
+        	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        	BankATM atm=null;
+        	try 
+        		{
+            		System.out.print("Enter your account number: ");
+            		String accountNumber = br.readLine();
+            		atm = new BankATM(accountNumber);
+
+           		 while (true) {
+                	System.out.println("\nOptions:");
+                	System.out.println("1. View Balance");
+                	System.out.println("2. Deposit");
+                	System.out.println("3. Withdraw");
+                	System.out.println("4. Transfer");
+                	System.out.println("5. Exit");
+                	System.out.print("Select an option: ");
+
+               	 int choice = Integer.parseInt(br.readLine());
+                	double amount;
+
+                	if (choice == 1) 
+                	{
+                    	System.out.println("Current Balance: Rs" + atm.Balance());
+                	}
+                 	else if (choice == 2) 
+                 	{
+                    	System.out.print("Enter the deposit amount: Rs");
+                    	amount = Double.parseDouble(br.readLine());
+                    	atm.deposit(amount);
+                	} 
+                	else if (choice == 3) 
+                	{
+                    	System.out.print("Enter the withdrawal amount: Rs");
+                    	amount = Double.parseDouble(br.readLine());
+                    	atm.withdraw(amount);
+                	} 
+                	else if (choice == 4) 
+                	{
+                    	System.out.print("Enter recipient's account number: ");
+                    	String rAccount = br.readLine();
+                    	BankATM r = new BankATM(rAccount);
+                    	System.out.print("Enter the transfer amount: Rs");
+                    	amount = Double.parseDouble(br.readLine());
+                    	atm.transfer(r, amount);
+                	}	 	
+                	else if (choice == 5) 
+                	{
+                    	System.out.println("Thank you for using the ATM. Have a nice day!");
+                    	break;
+                	} 
+                	else 
+                	{
+                    	System.out.println("Invalid option. Please try again.");
+                	}
+            }
+        } 
+        catch (NumberFormatException e) 
+        	{
+            	System.out.println("Invalid input. Please enter a number.");
+        	}
+         catch (IOException e) 
+         	{
+            	System.out.println("An error occurred while reading input.");
+        	} 
+        finally 
+        	{
+            	if (atm != null) 
+            		{
+                	System.out.println("Current Balance: Rs" + atm.Balance());
+               	 try 
+               	 	{
+                    		br.close();
+                		} 
+                	catch (IOException e) 
+                		{
+                    		System.out.println("An error occurred while closing the input stream.");
+                		}
+            		}
+        	}
+    }
+}
