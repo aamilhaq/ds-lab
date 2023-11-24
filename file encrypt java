@@ -1,0 +1,39 @@
+import java.util.*;
+import java.io.*;
+class Filencrypt
+{
+ public static void main(String args[]) throws IOException
+{
+  char c;
+  int i;
+  Scanner fs=new Scanner(System.in);
+  System.out.println("Enter the number of characters to be shifted:");
+  int n=fs.nextInt();
+  FileInputStream fin=new FileInputStream("textin.txt");
+  FileOutputStream fout=new FileOutputStream("textout.txt");
+  while((i=fin.read())!=-1)
+  {
+    c=(char)i;
+    if(c==' ')
+    {
+      fout.write(c);
+    }
+    else if((c>='a') && (c<='z') || (c>='A') && (c<='Z'))
+    {
+     i=i+n;
+     c=(char)i;
+     fout.write(c);
+    }
+    else
+    {
+     i=i+n;
+     c=(char)i;
+     fout.write(c);
+    }
+   }
+  System.out.println("Program completed");
+  fs.close();
+  fin.close();
+  fout.close();
+  }
+  }
