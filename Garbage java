@@ -1,0 +1,38 @@
+import java.util.*;
+
+class student{
+	String name;
+	int rollno;
+  
+	student(String n,int rno){
+	name=n;
+	rollno=rno;
+	}
+	
+	void display(){
+		System.out.println("Name is " +name+ " and the roll no is " +rollno);
+	}
+	public void finalize(){
+		System.out.println("Garbage collection performed by JVM:");
+	}
+}
+public class Garbage{
+	public static void main(String args[]){
+		Scanner s = new Scanner(System.in);
+		System.out.println("Enter name and rollno:  ");
+		String n = s.nextLine();
+		int r = s.nextInt();
+		student s1=new student(n,r);
+		System.out.println("Enter name and rollno:  ");
+        	String junk = s.nextLine();
+       	String n1 = s.nextLine();
+		int r1 = s.nextInt();
+		student s2=new student(n1,r1);
+		s1.display();
+		s2.display();
+		s1=null;
+		s2=null;
+		System.gc();
+		System.runFinalization();
+	}
+}
