@@ -1,0 +1,182 @@
+import java.util.Scanner;
+
+class Employee {
+    String name;
+    int id;
+    int salary;
+
+    Employee(String name, int id, int salary) {
+        this.name = name;
+        this.id = id;
+        this.salary = salary;
+    }
+
+    public void DisplayDetails() {
+        System.out.println("Name of employee is " + name);
+        System.out.println("Employee id is " + id);
+        System.out.println("Salary is " + salary);
+    }
+}
+
+class Manager extends Employee {
+    int teamsize;
+
+    Manager(String name, int id, int salary, int teamsize) {
+        super(name, id, salary);
+        this.teamsize = teamsize;
+    }
+
+    public void DisplayDetails() {
+        super.DisplayDetails();
+        System.out.println("Team size is " + teamsize);
+    }
+}
+
+class SeniorManager extends Employee {
+    int exp;
+
+    SeniorManager(String name, int id, int salary, int exp) {
+        super(name, id, salary);
+        this.exp = exp;
+    }
+
+    public void DisplayDetails() {
+        super.DisplayDetails();
+        System.out.println("Experience in years is " + exp);
+    }
+}
+
+class Developer extends Employee {
+    int proglang;
+
+    Developer(String name, int id, int salary, int proglang) {
+        super(name, id, salary);
+        this.proglang = proglang;
+    }
+
+    public void DisplayDetails() {
+        super.DisplayDetails();
+        System.out.println("Number of programming languages known by Developer is " + proglang);
+    }
+}
+
+class JuniorDeveloper extends Employee {
+    int skills;
+
+    JuniorDeveloper(String name, int id, int salary, int skills) {
+        super(name, id, salary);
+        this.skills = skills;
+    }
+
+    public void DisplayDetails() {
+        super.DisplayDetails();
+        System.out.println("Skills known by Junior Developer is " + skills);
+    }
+}
+
+class Intern extends Employee {
+    int period;
+
+    Intern(String name, int id, int salary, int period) {
+        super(name, id, salary);
+        this.period = period;
+    }
+
+    public void DisplayDetails() {
+        super.DisplayDetails();
+        System.out.println("Experience possessed by Intern is " + period+" years");
+    }
+}
+
+class Emp {
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+        int t = 1;
+        int ch;
+        while (t == 1) {
+            System.out.println("1. Manager\n2. SeniorManager\n3. Developer\n4. JuniorDeveloper\n5. Intern\n6. Exit");
+            System.out.print("Enter choice: ");
+            ch = s.nextInt();
+
+            switch (ch) {
+                case 1:
+                    System.out.print("Enter Name of employee: ");
+                    String name1 = s.next();
+                    System.out.print("Enter Employee id: ");
+                    int id1 = s.nextInt();
+                    System.out.print("Enter Salary: ");
+                    int salary1 = s.nextInt();
+                    System.out.print("Enter Team size: ");
+                    int ts1 = s.nextInt();
+
+                    Manager obj1 = new Manager(name1, id1, salary1, ts1);
+                    obj1.DisplayDetails();
+                    break;
+
+                case 2:
+                    System.out.print("Enter Name of employee: ");
+                    String name2 = s.next();
+                    System.out.print("Enter Employee id: ");
+                    int id2 = s.nextInt();
+                    System.out.print("Enter Salary: ");
+                    int salary2 = s.nextInt();
+                    System.out.print("Enter Years of experience: ");
+                    int exp2 = s.nextInt();
+
+                    SeniorManager obj2 = new SeniorManager(name2, id2, salary2, exp2);
+                    obj2.DisplayDetails();
+                    break;
+
+                case 3:
+                    System.out.print("Enter Name of employee: ");
+                    String name3 = s.next();
+                    System.out.print("Enter Employee id: ");
+                    int id3 = s.nextInt();
+                    System.out.print("Enter Salary: ");
+                    int salary3 = s.nextInt();
+                    System.out.print("Enter number of programming languages known: ");
+                    int proglang3 = s.nextInt();
+
+                    Developer obj3 = new Developer(name3, id3, salary3, proglang3);
+                    obj3.DisplayDetails();
+                    break;
+
+                case 4:
+                    System.out.print("Enter Name of employee: ");
+                    String name4 = s.next();
+                    System.out.print("Enter Employee id: ");
+                    int id4 = s.nextInt();
+                    System.out.print("Enter Salary: ");
+                    int salary4 = s.nextInt();
+                    System.out.print("Enter number of programming languages known: ");
+                    int skills4 = s.nextInt();
+
+                    JuniorDeveloper obj4 = new JuniorDeveloper(name4, id4, salary4, skills4);
+                    obj4.DisplayDetails();
+                    break;
+
+                case 5:
+                    System.out.print("Enter Name of employee: ");
+                    String name5 = s.next();
+                    System.out.print("Enter Employee id: ");
+                    int id5 = s.nextInt();
+                    System.out.print("Enter Salary: ");
+                    int salary5 = s.nextInt();
+                    System.out.print("Enter years of experience possessed: ");
+                    int period5 = s.nextInt();
+
+                    Intern obj5 = new Intern(name5, id5, salary5, period5);
+                    obj5.DisplayDetails();
+                    break;
+
+                case 6:
+                    t = 0;
+                    break;
+
+                default:
+                    System.out.println("Invalid choice");
+                    break;
+            }
+        }
+    }
+}
