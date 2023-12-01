@@ -1,0 +1,97 @@
+import java.awt.*;
+import java.awt.event.*;
+
+class Calc extends Frame implements ActionListener {
+
+    TextField inputField1, inputField2, inputField3, resultField;
+    Button calculateButton1, calculateButton2, calculateButton3;
+
+    Calc() {
+        setTitle("Calculator");
+        setSize(400, 200);
+        setLayout(new FlowLayout());
+
+        // Labels for each input field
+        Label inputLabel1 = new Label("Enter radius: ");
+        Label inputLabel2 = new Label("Enter length: ");
+        Label inputLabel3 = new Label("Enter breadth/height: ");
+
+        // Text fields for each input
+        inputField1 = new TextField(20);
+        inputField2 = new TextField(20);
+        inputField3 = new TextField(20);
+        resultField = new TextField(20);
+        resultField.setEditable(false);
+
+        // Buttons for each calculation
+        calculateButton1 = new Button("Calculate area of circle");
+        calculateButton2 = new Button("Calculate area of rectangle");
+        calculateButton3 = new Button("Calculate area of triangle");
+
+        // Adding components to the frame
+        add(inputLabel1);
+        add(inputField1);
+
+        add(inputLabel2);
+        add(inputField2);
+
+        add(inputLabel3);
+        add(inputField3);
+
+        add(resultField);
+
+        add(calculateButton1);
+        add(calculateButton2);
+        add(calculateButton3);
+
+        calculateButton1.addActionListener(this);
+        calculateButton2.addActionListener(this);
+        calculateButton3.addActionListener(this);
+
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent we) {
+                System.exit(0);
+            }
+        });
+
+        setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        try {
+            double value1 = Double.parseDouble(inputField1.getText().trim());
+            double value2 = Double.parseDouble(inputField2.getText().trim());
+            double value3 = Double.parseDouble(inputField3.getText().trim());
+
+            double area = 0.0;
+
+            if (e.getSource() == calculateButton1) {
+                area = calculateCircleArea(value1);
+            } else if (e.getSource() == calculateButton2) {
+                area = calculateRectangleArea(value1, value2);
+            } else if (e.getSource() == calculateButton3) {
+                area = calculateTriangleArea(value1, value3);
+            }
+
+            resultField.setText("Result: " + area);
+        } catch (NumberFormatException ex) {
+            resultField.setText("Error: Invalid input. Please enter numeric values.");
+        }
+    }
+
+    private double calculateCircleArea(double radius) {
+        return Math.PI * radius * radius;
+    }
+
+    private double calculateRectangleArea(double length, double breadth) {
+        return length * breadth;
+    }
+
+    private double calculateTriangleArea(double base, double height) {
+        return 0.5 * base * height;
+    }
+
+    public static void main(String[] args) {
+        new Calc();
+    }
+}
