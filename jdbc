@@ -1,0 +1,156 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
+
+public class problem_18 extends JFrame {
+    private Connection connection;
+    private JTextArea resultTextArea;
+
+    public problem_18() {
+        initializeGUI();
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            String url = "jdbc:mysql://localhost:3306/Employee";
+            String username = "root";
+            String password = "root";
+            connection = DriverManager.getConnection(url, username, password);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error connecting to the database");
+        }
+    }
+
+    private void initializeGUI() {
+        setTitle("Employee Database");
+        setSize(600, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        resultTextArea = new JTextArea();
+        JScrollPane scrollPane = new JScrollPane(resultTextArea);
+
+        JButton displayAllButton = new JButton("Display All Employees");
+        JButton displayByIdButton = new JButton("Display Employee by ID");
+        JButton displayByCriteriaButton = new JButton("Display by Nationality and Designation");
+        JButton deleteByYearButton = new JButton("Delete Employees Before Year");
+
+        setLayout(new BorderLayout());
+
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 2, 10, 10));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        buttonPanel.add(createStyledButton(displayAllButton));
+        buttonPanel.add(createStyledButton(displayByIdButton));
+        buttonPanel.add(createStyledButton(displayByCriteriaButton));
+        buttonPanel.add(createStyledButton(deleteByYearButton));
+
+        add(buttonPanel, BorderLayout.SOUTH);
+        add(scrollPane, BorderLayout.CENTER);
+    }
+
+    private JButton createStyledButton(JButton button) {
+        button.setBackground(new Color(0, 123, 255));
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.addActionListener(new ButtonActionListener());
+        return button;
+    }
+
+    private class ButtonActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JButton source = (JButton) e.getSource();
+            switch (source.getText()) {
+                case "Display All Employees":
+                    displayAllEmployees();
+                    break;
+                case "Display Employee by ID":
+                    displayById();
+                    break;
+                case "Display by Nationality and Designation":
+                    displayByCriteria();
+                    break;
+                case "Delete Employees Before Year":
+                    deleteByYear();
+                    break;
+            }
+        }
+    }
+
+    private void displayAllEmployees() {
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery("SELECT * FROM emp1 ORDER BY salary DESC")) {
+            displayResultSet(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error executing query");
+        }
+    }
+
+    private void displayById() {
+        String empId = JOptionPane.showInputDialog("Enter Employee ID:");
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM emp1 WHERE emp_id = ?")) {
+            preparedStatement.setString(1, empId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            displayResultSet(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error executing query");
+        }
+    }
+
+    private void displayByCriteria() {
+        String nationality = JOptionPane.showInputDialog("Enter Nationality:");
+        String designation = JOptionPane.showInputDialog("Enter Designation:");
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM emp1 WHERE nationality = ? AND designation = ?")) {
+            preparedStatement.setString(1, nationality);
+            preparedStatement.setString(2, designation);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            displayResultSet(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error executing query");
+        }
+    }
+
+    private void deleteByYear() {
+        String year = JOptionPane.showInputDialog("Enter Year:");
+        try (PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM emp1 WHERE yearofjoining < ?")) {
+            preparedStatement.setString(1, year);
+            int rowsAffected = preparedStatement.executeUpdate();
+            JOptionPane.showMessageDialog(this, rowsAffected + " rows deleted successfully");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error executing query");
+        }
+    }
+
+    private void displayResultSet(ResultSet resultSet) throws SQLException {
+        StringBuilder result = new StringBuilder();
+        boolean isEmpty = true;
+
+        while (resultSet.next()) {
+            isEmpty = false;
+            result.append("Emp ID: ").append(resultSet.getString("emp_id"))
+                    .append(", Name: ").append(resultSet.getString("name"))
+                    .append(", Designation: ").append(resultSet.getString("designation"))
+                    .append(", Nationality: ").append(resultSet.getString("nationality"))
+                    .append(", Year of Joining: ").append(resultSet.getInt("yearofjoining"))
+                    .append(", Salary: ").append(resultSet.getDouble("salary"))
+                    .append("\n");
+        }
+
+        if (isEmpty) {
+            SwingUtilities.invokeLater(() -> resultTextArea.setText("No records found."));
+        } else {
+            SwingUtilities.invokeLater(() -> resultTextArea.setText(result.toString()));
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new problem_18().setVisible(true));
+    }
+}
